@@ -10,6 +10,7 @@ export default class ImplicitGrantStrategy implements IAuthStrategy {
 
     constructor(
         private clientId: string,
+        private clientSecret: string,
         private redirectUri: string,
         private scopes: string[]
     ) {
@@ -26,7 +27,7 @@ export default class ImplicitGrantStrategy implements IAuthStrategy {
                 const token = await this.redirectOrVerifyToken();
                 return AccessTokenHelpers.toCachable(token);
             }, async (expiring) => {
-                return AccessTokenHelpers.refreshCachedAccessToken(this.clientId, expiring);
+                return AccessTokenHelpers.refreshCachedAccessToken(this.clientId, this.clientSecret, expiring);
             },
         );
 
